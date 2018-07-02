@@ -27,6 +27,42 @@ namespace hacbuildGUI
         public MainWindow()
         {
             InitializeComponent();
+            
+            string hbe = AppDomain.CurrentDomain.BaseDirectory + "\\hacbuild.exe";
+
+            bool hbcheck = File.Exists(hbe);
+
+            if (hbcheck == false) 
+            {
+                DialogResult hbcheckd = System.Windows.Forms.MessageBox.Show(" The hacbuild binary is not present in the current working\n" +
+                    " directory. " +
+                    "You will now be redirected to the download page.",
+                "Error", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+                if (hbcheckd == System.Windows.Forms.DialogResult.OK)
+                {
+                    Process.Start("https://github.com/LucaFraga/hacbuild/releases/latest");
+                    Process.GetCurrentProcess().Kill();
+                }
+            }
+
+            string ktxt = AppDomain.CurrentDomain.BaseDirectory + "\\keys.txt";
+
+            bool kcheck = File.Exists(ktxt);
+
+            if (kcheck == false)
+            {
+                DialogResult kcheckd = System.Windows.Forms.MessageBox.Show(" keys.txt is missing.\n Please add it to the current working directory to ensure that\n" +
+                    " hacbuild will work properly.",
+                    "Warning", MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Warning);
+
+                if (kcheckd == System.Windows.Forms.DialogResult.Cancel)
+                {
+                    System.Windows.Application.Current.Shutdown();
+                }
+            }
         }
 
         Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
